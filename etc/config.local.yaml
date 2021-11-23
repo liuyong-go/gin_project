@@ -1,0 +1,20 @@
+logger:
+  dir: /var/logs
+http:
+  mode: debug #release,debug
+  listen: 0.0.0.0:80
+  pprof: false
+  cookieName: test
+  cookieDomain: ""
+  cookieMaxAge: 86400
+  cookieSecure: false
+  cookieHttpOnly: true
+  cookieSecret: 1sdad123sd21
+  csrfSecret: 1sed123ase12312
+rpc:
+  listen: 0.0.0.0:9000
+mysql:
+  addr: "root:123@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Asia%2FShanghai"
+  max: 128
+  idle: 16
+  debug: false
