@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"github.com/liuyong-go/gin_project/app/models"
 	"github.com/liuyong-go/gin_project/config"
 	"github.com/liuyong-go/gin_project/libs/logger"
 )
@@ -11,5 +12,8 @@ func Start() {
 		panic(err)
 	}
 	logger.InitLogger(config.Config.Logger)
-	logger.Info(config.Config)
+	err = models.InitMysql(config.Config.MySQL)
+	if err != nil {
+		logger.Warn("db init fail", err)
+	}
 }

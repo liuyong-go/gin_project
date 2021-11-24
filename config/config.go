@@ -6,7 +6,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/liuyong-go/gin_project/libs"
+	"github.com/liuyong-go/gin_project/app/models"
 	"github.com/liuyong-go/gin_project/libs/logger"
 	"github.com/toolkits/pkg/file"
 	"github.com/toolkits/pkg/runner"
@@ -44,7 +44,7 @@ type ConfigStruct struct {
 	Logger logger.LoggerStruct
 	HTTP   httpStruct
 	RPC    rpcStruct
-	MySQL  libs.MysqlConfig
+	MySQL  models.MysqlConfig
 }
 
 type httpStruct struct {
