@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"time"
 
 	"github.com/liuyong-go/gin_project/bootstrap"
 	"github.com/liuyong-go/gin_project/config"
@@ -30,5 +29,5 @@ func init() {
 func main() {
 	bootstrap.Start()
 	defer ydefer.Clean()
-	time.Sleep(5 * time.Second)
+	//time.Sleep(5 * time.Second)
 }

@@ -1,11 +1,11 @@
 logger:
   development: true
-  infoPath: "/Users/liuyong/go/src/logs/gin_project"
-  errorPath: "/Users/liuyong/go/src/logs/gin_project"
-  async: true
+  infoPath: "/Users/liuyong/go/src/logs/gin_project/info/log"
+  errorPath: "/Users/liuyong/go/src/logs/gin_project/error/log"
+  async: false
   buffer:
     bufferSize: 262144 #256 * 1024
-    flushInterval: 30 #30 * time.Second
+    flushInterval: 20 #30 * time.Second
   encodeConfig:
     messageKey: "msg"
     levelKey: "level"

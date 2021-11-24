@@ -72,10 +72,11 @@ func InitLogger(conf LoggerStruct) {
 		wsWarn = zapcore.AddSync(getWriter(conf.RotationLogs, conf.ErrorPath))
 	}
 	if conf.Async == true {
-		var close CloseFunc
-		wsInfo, close = Buffer(wsInfo, conf.Buffer.BufferSize, conf.Buffer.FlushInterval*time.Second)
-		wsWarn, close = Buffer(wsWarn, conf.Buffer.BufferSize, conf.Buffer.FlushInterval*time.Second)
-		ydefer.Register(close)
+		var closeInfo, closeWarn CloseFunc
+		wsInfo, closeInfo = Buffer(wsInfo, conf.Buffer.BufferSize, conf.Buffer.FlushInterval*time.Second)
+		wsWarn, closeWarn = Buffer(wsWarn, conf.Buffer.BufferSize, conf.Buffer.FlushInterval*time.Second)
+		ydefer.Register(closeInfo)
+		ydefer.Register(closeWarn)
 	}
 	if conf.Development == true {
 		core = zapcore.NewTee(
