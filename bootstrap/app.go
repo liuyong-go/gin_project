@@ -4,6 +4,7 @@ import (
 	"github.com/liuyong-go/gin_project/app/models"
 	"github.com/liuyong-go/gin_project/config"
 	"github.com/liuyong-go/gin_project/libs/logger"
+	"github.com/liuyong-go/gin_project/libs/yhttp"
 )
 
 func Start() {
@@ -16,4 +17,5 @@ func Start() {
 	if err != nil {
 		logger.Warn("db init fail", err)
 	}
+	yhttp.Start()
 }
