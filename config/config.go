@@ -1,11 +1,16 @@
 package config
 
 import (
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path"
 
 	"github.com/liuyong-go/gin_project/libs"
+	"github.com/toolkits/pkg/file"
 	"github.com/toolkits/pkg/runner"
+	"gopkg.in/yaml.v2"
 )
 
 var BaseInfo *Base
@@ -19,13 +24,15 @@ type Base struct {
 
 func InitBaseInfo() {
 	env := os.Getenv("APP_ENV")
+	if env == "" {
+		env = "local"
+	}
 	rootPath := runner.Cwd
-	fmt.Println("root", rootPath)
 	var configPath string
 	if env == "local" {
 		rootPath = "/Users/liuyong/go/src/gin_project"
 	}
-	configPath = rootPath + "/config"
+	configPath = rootPath + "/etc"
 	BaseInfo = &Base{
 		RootPath:   rootPath,
 		ConfigPath: configPath,
@@ -56,7 +63,28 @@ type rpcStruct struct {
 	Listen string `yaml:"listen"`
 }
 
-func Parse() error {
-
+//获取基础配置项
+func ParseConfig() error {
+	ymlFile := GetYmlFile("config")
+	if ymlFile == "" {
+		return errors.New("configuration file of config not found")
+	}
+	data, _ := ioutil.ReadFile(ymlFile)
+	yaml.Unmarshal(data, &Config)
+	if Config.HTTP.Mode == "" {
+		return errors.New("configuration file of config parse fail")
+	}
+	fmt.Println(Config)
 	return nil
+}
+func GetYmlFile(module string) string {
+	filename := module + ".yaml"
+	if module == "config" {
+		filename = module + "." + BaseInfo.Env + ".yaml"
+	}
+	ymlFile := path.Join(BaseInfo.ConfigPath, filename)
+	if file.IsExist(ymlFile) {
+		return ymlFile
+	}
+	return ""
 }
