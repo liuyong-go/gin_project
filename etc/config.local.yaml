@@ -1,5 +1,20 @@
 logger:
-  dir: /var/logs
+  development: true
+  infoPath: "/Users/liuyong/go/src/logs/gin_project"
+  errorPath: "/Users/liuyong/go/src/logs/gin_project"
+  async: true
+  buffer:
+    bufferSize: 262144 #256 * 1024
+    flushInterval: 30 #30 * time.Second
+  encodeConfig:
+    messageKey: "msg"
+    levelKey: "level"
+    timeKey: "time"
+    callerKey: "filePath"
+  rotationLogs:
+    maxAge: 720
+    rotationTime: 24
+
 http:
   mode: debug #release,debug
   listen: 0.0.0.0:80

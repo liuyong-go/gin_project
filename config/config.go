@@ -2,12 +2,12 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
 
 	"github.com/liuyong-go/gin_project/libs"
+	"github.com/liuyong-go/gin_project/libs/logger"
 	"github.com/toolkits/pkg/file"
 	"github.com/toolkits/pkg/runner"
 	"gopkg.in/yaml.v2"
@@ -41,7 +41,7 @@ func InitBaseInfo() {
 }
 
 type ConfigStruct struct {
-	Logger libs.LoggerStruct
+	Logger logger.LoggerStruct
 	HTTP   httpStruct
 	RPC    rpcStruct
 	MySQL  libs.MysqlConfig
@@ -74,7 +74,6 @@ func ParseConfig() error {
 	if Config.HTTP.Mode == "" {
 		return errors.New("configuration file of config parse fail")
 	}
-	fmt.Println(Config)
 	return nil
 }
 func GetYmlFile(module string) string {
