@@ -5,7 +5,6 @@ import (
 
 	"github.com/liuyong-go/gin_project/bootstrap"
 	"github.com/liuyong-go/gin_project/config"
-	"github.com/liuyong-go/gin_project/libs/ydefer"
 	"github.com/toolkits/pkg/runner"
 )
 
@@ -28,6 +27,5 @@ func init() {
 //调用bootstrap启动项目
 func main() {
 	bootstrap.Start()
-	defer ydefer.Clean()
 	//time.Sleep(5 * time.Second)
 }

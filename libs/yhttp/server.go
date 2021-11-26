@@ -1,6 +1,7 @@
 package yhttp
 
 import (
+	"context"
 	"net/http"
 	"os"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/liuyong-go/gin_project/config"
+	"github.com/liuyong-go/gin_project/libs/logger"
 	"github.com/liuyong-go/gin_project/routes"
 )
 
@@ -18,6 +20,7 @@ var srv = &http.Server{
 	MaxHeaderBytes: 1 << 20,
 }
 
+//开启http
 func Start() {
 	c := config.Config
 	gin.SetMode(c.HTTP.Mode)
@@ -41,4 +44,22 @@ func Start() {
 			os.Exit(3)
 		}
 	}()
+}
+
+//关闭http
+func Shutdown() {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		logger.Info("cannot shutdown http server:", err)
+		os.Exit(2)
+	}
+
+	// catching ctx.Done(). timeout of 5 seconds.
+	select {
+	case <-ctx.Done():
+		logger.Info("shutdown http server timeout of 5 seconds.")
+	default:
+		logger.Info("http server stopped")
+	}
 }
