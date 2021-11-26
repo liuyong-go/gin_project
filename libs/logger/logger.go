@@ -1,8 +1,10 @@
 package logger
 
 import (
+	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"time"
 
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -35,7 +37,7 @@ type LogBuffer struct {
 	FlushInterval time.Duration `yaml:"flushInterval"`
 }
 
-var logger *zap.Logger
+var logger *zap.SugaredLogger
 
 func InitLogger(conf LoggerStruct) {
 	// config := zapcore.EncoderConfig{}
@@ -90,7 +92,7 @@ func InitLogger(conf LoggerStruct) {
 	}
 	//实现多个输出
 
-	logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.WarnLevel))
+	logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.WarnLevel)).Sugar()
 }
 func getWriter(rl RotateLogs, filename string) io.Writer {
 	hook, err := rotatelogs.New(
@@ -105,13 +107,20 @@ func getWriter(rl RotateLogs, filename string) io.Writer {
 	return hook
 }
 func Panic(data ...interface{}) {
-	logger.Sugar().Panic(data...)
+	_, file, line, _ := runtime.Caller(1)
+	data = append(data, file+":"+fmt.Sprintf("%d", line))
+	logger.Panic(data...)
 }
 
 func Info(data ...interface{}) {
-	logger.Sugar().Info(data...)
+	_, file, line, _ := runtime.Caller(1)
+	data = append(data, file+":"+fmt.Sprintf("%d", line))
+
+	logger.Info(data...)
 }
 
 func Warn(data ...interface{}) {
-	logger.Sugar().Warn(data...)
+	_, file, line, _ := runtime.Caller(1)
+	data = append(data, file+":"+fmt.Sprintf("%d", line))
+	logger.Warn(data...)
 }

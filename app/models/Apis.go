@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/liuyong-go/gin_project/libs/logger"
+)
 
 type Apis struct {
-	ID                         string    `json:"id"`
+	ID                         int       `json:"id"`
 	SiteId                     int       `json:"site_id"`
 	DepartmentId               string    `json:"department_id"`
 	Title                      string    `json:"title"`
@@ -23,6 +27,16 @@ type Apis struct {
 	AvgSlowExecTimeOfYesterday float32   `json:"avg_slow_exec_time_of_yesterday"`
 }
 
+func NewApis() *Apis {
+	return &Apis{}
+}
+
 func (*Apis) TableName() string {
 	return "apis"
+}
+func (a *Apis) Create() {
+	err := DB.Create(&a).Error
+	if err != nil {
+		logger.Info("db insert fail", err)
+	}
 }

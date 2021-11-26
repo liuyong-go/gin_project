@@ -15,19 +15,26 @@ import (
 )
 
 func Start() {
+	InitConfig()
+	ctx, cancelFunc := context.WithCancel(context.Background())
+	logger.Info("ctx 后续使用", ctx)
+	yhttp.Start()
+	endingProc(cancelFunc)
+}
+func InitConfig() {
 	err := config.ParseConfig()
 	if err != nil {
 		panic(err)
 	}
-	ctx, cancelFunc := context.WithCancel(context.Background())
 	logger.InitLogger(config.Config.Logger)
 	err = models.InitMysql(config.Config.MySQL)
 	if err != nil {
 		logger.Warn("db init fail", err)
 	}
-	logger.Info("ctx 后续使用", ctx)
-	yhttp.Start()
-	endingProc(cancelFunc)
+}
+func TestInit() {
+	config.InitBaseInfo()
+	InitConfig()
 }
 
 //监听停止服务信号
