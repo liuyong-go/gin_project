@@ -1,10 +1,10 @@
 package main
 
 import (
-	"gitee.com/liuyongchina/go-library/libs/ymysql/generate"
 	"github.com/liuyong-go/gin_project/app/models"
 	"github.com/liuyong-go/gin_project/config"
 	"github.com/liuyong-go/gin_project/libs/logger"
+	"github.com/liuyong-go/gin_project/libs/modelsgenerate"
 	"github.com/toolkits/pkg/runner"
 )
 
@@ -25,5 +25,5 @@ func geneModels() {
 	}
 	modelPath := config.BaseInfo.RootPath + "/app/models/"
 	var tables = []string{"apis"}
-	generate.NewGenerator(models.DB, modelPath, "test").Genertate(tables...)
+	modelsgenerate.NewGenerator(models.DB, modelPath, "test").Genertate(tables...)
 }
