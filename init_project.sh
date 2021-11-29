@@ -1,8 +1,9 @@
 #!/bin/bash
 help(){
 	echo "使用方式"
-	echo "https://raw.githubusercontent.com/liuyong-go/gin_project/main/init_project.sh mod_name dir"
-	echo "eg https://raw.githubusercontent.com/liuyong-go/gin_project/main/init_project.sh 'github.com/liuyong-go' new_project" 
+	echo "https://raw.githubusercontent.com/liuyong-go/gin_project/main/init_project.sh mod_name dir gitpath"
+	echo "eg https://raw.githubusercontent.com/liuyong-go/gin_project/main/init_project.sh 'github.com/liuyong-go' new_project 'github.com/liuyong-go'" 
+	echo "参数 gomod 路径，项目目录，git仓库"
 	exit 0
 }
 case $1 in
