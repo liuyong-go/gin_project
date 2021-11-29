@@ -25,7 +25,7 @@ echo $dir
 # 	mkdir $dir
 # fi
 echo "拉取代码"
-#git clone https://github.com/liuyong-go/gin_project.git $dir
+git clone https://github.com/liuyong-go/gin_project.git $dir
 
 cd $dir
 
@@ -36,13 +36,19 @@ grep -rl "github.com/liuyong-go/gin_project" . --exclude=*sh| xargs  perl -pi -e
 
 go mod init ${modname}
 go mod tidy
+gitpath=${3}
+if [ -z "$gitpath" ];then
+	echo "done"
+	exit 0
+fi
+echo "初始化git"
+
+
+git init
+git add *
+git commit -m '初始化'
+git remote add origin $gitpath
+git push -u origin master
+
+
 echo "done"
-echo " 对新建的文件夹进行初始化：  git init，之后该项目下会出现一个  .git 的隐藏文件，该项目变成本地仓库。"
-echo "添加远端仓库：git remote add opstech 远端仓库地址
-
-   添加之后，可以用  git remote -v 进行查看 ，然后git  commit -m "xx"
-"
-echo "git push --set-upstream xxxx"
-
-
-
