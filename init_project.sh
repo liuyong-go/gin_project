@@ -1,8 +1,8 @@
 #!/bin/bash
 help(){
 	echo "使用方式"
-	echo "./init_project.sh mod_name dir"
-	echo "eg ./init_project.sh 'github.com/liuyong-go' new_project" 
+	echo "https://raw.githubusercontent.com/liuyong-go/gin_project/main/init_project.sh mod_name dir"
+	echo "eg https://raw.githubusercontent.com/liuyong-go/gin_project/main/init_project.sh 'github.com/liuyong-go' new_project" 
 	exit 0
 }
 case $1 in
