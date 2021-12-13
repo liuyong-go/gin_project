@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/liuyong-go/gin_project/app/http/controllers"
+	"github.com/liuyong-go/gin_project/app/api/controllers"
 )
 
 func SetRoutes(r *gin.Engine) {
