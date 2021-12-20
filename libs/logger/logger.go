@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -106,21 +107,28 @@ func getWriter(rl RotateLogs, filename string) io.Writer {
 	}
 	return hook
 }
-func Panic(data ...interface{}) {
-	_, file, line, _ := runtime.Caller(1)
-	data = append(data, file+":"+fmt.Sprintf("%d", line))
+func Panic(ctx context.Context, data ...interface{}) {
+	data = withTrace(ctx, data...)
 	logger.Panic(data...)
 }
 
-func Info(data ...interface{}) {
-	_, file, line, _ := runtime.Caller(1)
-	data = append(data, file+":"+fmt.Sprintf("%d", line))
-
+func Info(ctx context.Context, data ...interface{}) {
+	data = withTrace(ctx, data...)
 	logger.Info(data...)
 }
+func withTrace(ctx context.Context, data ...interface{}) (returnData []interface{}) {
+	_, file, line, _ := runtime.Caller(2)
+	returnData = append(data, fmt.Sprintf(" ,path: file:%s,line :%d", file, line))
+	ltrace := ctx.Value("trace")
+	if ltrace != nil {
+		traceStr := fmt.Sprintf(", traceID:%s,spanID:%s", ltrace.(*Trace).TraceID, ltrace.(*Trace).SpanID)
+		returnData = append(returnData, traceStr)
+	}
 
-func Warn(data ...interface{}) {
-	_, file, line, _ := runtime.Caller(1)
-	data = append(data, file+":"+fmt.Sprintf("%d", line))
+	return
+}
+
+func Warn(ctx context.Context, data ...interface{}) {
+	data = withTrace(ctx, data...)
 	logger.Warn(data...)
 }

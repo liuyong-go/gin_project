@@ -7,11 +7,24 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/liuyong-go/gin_project/app/api/controllers"
+	"github.com/liuyong-go/gin_project/libs/logger"
 )
 
 func SetRoutes(r *gin.Engine) {
+	r.Use(TraceLog())
 	r.Use(Cors())
 	r.GET("hello", controllers.NewHello().World)
+}
+func TraceLog() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		traceID := c.Request.Header.Get("traceID")
+		ltrace, err := logger.InjectTraceContext(c, traceID, "")
+		if err != nil {
+			ltrace, _ = logger.InjectTraceContext(c, "", "")
+		}
+		c.Set("trace", ltrace)
+		c.Next()
+	}
 }
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {

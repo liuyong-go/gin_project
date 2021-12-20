@@ -1,6 +1,8 @@
 package models
 
 import (
+	"context"
+
 	"github.com/liuyong-go/gin_project/libs/logger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -17,6 +19,6 @@ type MysqlConfig struct {
 
 func InitMysql(conf MysqlConfig) (err error) {
 	DB, err = gorm.Open(mysql.Open(conf.Addr), &gorm.Config{})
-	logger.Info("db", DB)
+	logger.Info(context.TODO(), "db", DB)
 	return
 }

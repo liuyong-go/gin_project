@@ -17,7 +17,7 @@ import (
 func Start() {
 	InitConfig()
 	ctx, cancelFunc := context.WithCancel(context.Background())
-	logger.Info("ctx 后续使用", ctx)
+	logger.Info(context.TODO(), "ctx 后续使用", ctx)
 	yhttp.Start()
 	endingProc(cancelFunc)
 }
@@ -29,7 +29,7 @@ func InitConfig() {
 	logger.InitLogger(config.Config.Logger)
 	err = models.InitMysql(config.Config.MySQL)
 	if err != nil {
-		logger.Warn("db init fail", err)
+		logger.Warn(context.TODO(), "db init fail", err)
 	}
 }
 func TestInit() {

@@ -51,15 +51,15 @@ func Shutdown() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		logger.Info("cannot shutdown http server:", err)
+		logger.Info(context.TODO(), "cannot shutdown http server:", err)
 		os.Exit(2)
 	}
 
 	// catching ctx.Done(). timeout of 5 seconds.
 	select {
 	case <-ctx.Done():
-		logger.Info("shutdown http server timeout of 5 seconds.")
+		logger.Info(context.TODO(), "shutdown http server timeout of 5 seconds.")
 	default:
-		logger.Info("http server stopped")
+		logger.Info(context.TODO(), "http server stopped")
 	}
 }

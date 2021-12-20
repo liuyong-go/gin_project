@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+
 	"github.com/liuyong-go/gin_project/app/models"
 	"github.com/liuyong-go/gin_project/config"
 	"github.com/liuyong-go/gin_project/libs/logger"
@@ -21,7 +23,7 @@ func geneModels() {
 	logger.InitLogger(config.Config.Logger)
 	err = models.InitMysql(config.Config.MySQL)
 	if err != nil {
-		logger.Warn("db init fail", err)
+		logger.Warn(context.TODO(), "db init fail", err)
 	}
 	modelPath := config.BaseInfo.RootPath + "/app/models/"
 	var tables = []string{"apis"}

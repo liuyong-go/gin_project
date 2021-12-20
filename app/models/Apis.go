@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"time"
 
 	"github.com/liuyong-go/gin_project/libs/logger"
@@ -34,9 +35,9 @@ func NewApis() *Apis {
 func (*Apis) TableName() string {
 	return "apis"
 }
-func (a *Apis) Create() {
+func (a *Apis) Create(ctx context.Context) {
 	err := DB.Create(&a).Error
 	if err != nil {
-		logger.Info("db insert fail", err)
+		logger.Info(ctx, "db insert fail", err)
 	}
 }
