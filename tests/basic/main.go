@@ -6,12 +6,14 @@ import (
 
 	"github.com/liuyong-go/gin_project/app/models"
 	"github.com/liuyong-go/gin_project/bootstrap"
+	"github.com/liuyong-go/gin_project/config"
 	"github.com/liuyong-go/gin_project/libs/logger"
 )
 
 func main() {
 	bootstrap.TestInit()
-	testTrace()
+	//testTrace()
+	getJson()
 }
 func testDB() {
 	var data = models.NewApis()
@@ -29,4 +31,10 @@ func testTrace() {
 	ctx = context.WithValue(ctx, "trace", ltrace)
 	logger.Info(ctx, "测试log")
 	fmt.Println("error", err)
+}
+func getJson() {
+	test := config.GetTest(context.Background())
+	fmt.Println(test)
+	test = config.GetTest(context.Background())
+	fmt.Println(test)
 }
