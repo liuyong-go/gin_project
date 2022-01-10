@@ -9,6 +9,8 @@ require (
 	github.com/go-logr/logr v1.2.2 // indirect
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect
+	github.com/idoubi/goutils v1.0.1 // indirect
+	github.com/idoubi/goz v1.2.1 // indirect
 	github.com/jinzhu/now v1.1.3 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.5 // indirect
@@ -23,6 +25,7 @@ require (
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.19.1
 	golang.org/x/crypto v0.0.0-20211117183948-ae814b36b871 // indirect
+	golang.org/x/net v0.0.0-20220107192237-5cfca573fb4d // indirect
 	golang.org/x/sys v0.0.0-20211123173158-ef496fb156ab // indirect
 	google.golang.org/grpc v1.42.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect

@@ -15,7 +15,7 @@ import (
 
 var TokenData *AceessToken
 
-var weappMap = make(map[string]Weapp)
+var weappMap = map[string]Weapp{}
 
 type Weapp struct {
 	AppName string `json:"app_name"`

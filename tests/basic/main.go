@@ -19,7 +19,7 @@ func main() {
 }
 func testweapp() {
 	var ctx = context.Background()
-	weapp, err := weapp.NewWeapp(ctx, "test3")
+	weapp, err := weapp.NewWeapp(ctx, "test")
 	if err != nil {
 		fmt.Println(err)
 	}
