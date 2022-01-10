@@ -13,6 +13,7 @@ require (
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.5 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/tidwall/gjson v1.12.1 // indirect
 	github.com/toolkits/pkg v1.2.9
 	github.com/ugorji/go v1.2.6 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect

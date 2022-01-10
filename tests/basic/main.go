@@ -8,12 +8,22 @@ import (
 	"github.com/liuyong-go/gin_project/bootstrap"
 	"github.com/liuyong-go/gin_project/config"
 	"github.com/liuyong-go/gin_project/libs/logger"
+	"github.com/liuyong-go/gin_project/libs/weapp"
 )
 
 func main() {
 	bootstrap.TestInit()
 	//testTrace()
-	getJson()
+	//getJson()
+	testweapp()
+}
+func testweapp() {
+	var ctx = context.Background()
+	weapp, err := weapp.NewWeapp(ctx, "test3")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(weapp)
 }
 func testDB() {
 	var data = models.NewApis()
