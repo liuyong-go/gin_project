@@ -13,7 +13,7 @@ port=(58322 58323)
 
 #app_name ps进程获取当前执行进程名
 
-ps aux | grep php | awk '{print $2,$11}' > /tmp/deploy_$app_name
+ps aux | grep $app_name | awk '{print $2,$11}' > /tmp/deploy_$app_name
 i=0
 while read a b
 do
@@ -22,7 +22,7 @@ do
     i=`expr $i + 1`
 done < /tmp/deploy_$app_name
 echo "pids: "${pids[@]}
-appnames[0]="ceshi_58322"
+#appnames[0]="ceshi_58322"
 #echo ${appnames[@]}
 #needkill
 
@@ -72,7 +72,8 @@ fi
 go mod tidy
 go build -o ${build_path}${app_name}"_"${runpid}
 sudo chmod 755 ${build_path}${app_name}"_"${runpid}
-nohup ${build_path}${app_name}"_"${runpid} -l ${listen_adress}":"${runpid} &
+echo ${build_path}${app_name}"_"${runpid} -l=${listen_adress}":"${runpid}
+nohup ${build_path}${app_name}"_"${runpid} -l=${listen_adress}":"${runpid} &
 #修改nginx配置文件映射端口号 sudo nginx -s reload
 
 #5分钟后kill掉之前进程
