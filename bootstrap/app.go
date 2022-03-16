@@ -22,12 +22,9 @@ func Start() {
 	endingProc(cancelFunc)
 }
 func InitConfig() {
-	err := config.ParseConfig()
-	if err != nil {
-		panic(err)
-	}
+
 	logger.InitLogger(config.Config.Logger)
-	err = models.InitMysql(config.Config.MySQL)
+	err := models.InitMysql(config.Config.MySQL)
 	if err != nil {
 		logger.Warn(context.TODO(), "db init fail", err)
 	}

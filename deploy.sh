@@ -17,11 +17,11 @@ ps aux | grep php | awk '{print $2,$11}' > /tmp/deploy_$app_name
 i=0
 while read a b
 do
-    i=`expr $i + 1`
     pids[$i]=$a
     appnames[$i]=$b
+    i=`expr $i + 1`
 done < /tmp/deploy_$app_name
-#echo ${pids[@]}
+echo "pids: "${pids[@]}
 appnames[0]="ceshi_58322"
 #echo ${appnames[@]}
 #needkill
@@ -36,7 +36,7 @@ do
             needkillpid[${#needkillpid[*]}]=${pids[$index]}
             break
         fi
-        index=$index + 1
+        index=`expr $index + 1`
     done
 done
 killpid=0
@@ -52,7 +52,7 @@ if [ ${#needkillpid[*]} == 1 ];then
 fi
 for p in ${port[*]}
 do
-    if [ $p != $killpid ];then
+    if [ $p != $killport ];then
         runpid=$p
         break
     fi

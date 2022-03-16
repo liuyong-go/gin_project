@@ -38,6 +38,10 @@ func InitBaseInfo() {
 		ConfigPath: configPath,
 		Env:        env,
 	}
+	err := ParseConfig()
+	if err != nil {
+		panic(err)
+	}
 }
 
 type ConfigStruct struct {

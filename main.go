@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 
 	"github.com/liuyong-go/gin_project/bootstrap"
 	"github.com/liuyong-go/gin_project/config"
@@ -23,7 +24,8 @@ func init() {
 		config.BaseInfo.ConfigPath = *f
 	}
 	if *listen != "" {
-		config.Config.HTTP.Listen = *listen
+		fmt.Println(config.Config.HTTP.Listen, *listen)
+		//config.Config.HTTP.Listen = *listen
 	}
 
 }
