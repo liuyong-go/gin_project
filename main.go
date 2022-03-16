@@ -9,16 +9,21 @@ import (
 )
 
 var (
-	f *string
+	f      *string
+	listen *string
 )
 
 func init() {
 	f = flag.String("f", "", "config path")
+	listen = flag.String("listen", "", "listen adress and port")
 	flag.Parse()
 	runner.Init()
 	config.InitBaseInfo()
 	if *f != "" {
 		config.BaseInfo.ConfigPath = *f
+	}
+	if *listen != "" {
+		config.Config.HTTP.Listen = *listen
 	}
 
 }
