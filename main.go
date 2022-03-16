@@ -15,7 +15,7 @@ var (
 
 func init() {
 	f = flag.String("f", "", "config path")
-	listen = flag.String("listen", "", "listen adress and port")
+	listen = flag.String("l", "", "listen adress and port")
 	flag.Parse()
 	runner.Init()
 	config.InitBaseInfo()
