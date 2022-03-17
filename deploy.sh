@@ -87,8 +87,8 @@ grep -rn $nginx_pattern $nginx_conf
 #sudo nginx -s reload
 echo "重启nginx完成"
 #5分钟后kill掉之前进程
-echo "休眠5分钟"
-sleep 3
+echo "休眠1分钟"
+sleep 60
 kill -9 $killpid
 
 
