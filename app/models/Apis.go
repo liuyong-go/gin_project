@@ -41,3 +41,8 @@ func (a *Apis) Create(ctx context.Context) {
 		logger.Info(ctx, "db insert fail", err)
 	}
 }
+func (a *Apis) Get(ctx context.Context) Apis {
+	var api Apis
+	DB.First(&api)
+	return api
+}

@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/idoubi/goutils v1.0.1 // indirect
 	github.com/idoubi/goz v1.2.1 // indirect
-	github.com/jinzhu/now v1.1.3 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.5 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
@@ -30,6 +30,7 @@ require (
 	google.golang.org/grpc v1.42.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0
-	gorm.io/driver/mysql v1.2.0
-	gorm.io/gorm v1.22.3
+	gorm.io/driver/mysql v1.3.2
+	gorm.io/gorm v1.23.3
+	gorm.io/plugin/dbresolver v1.1.0 // indirect
 )

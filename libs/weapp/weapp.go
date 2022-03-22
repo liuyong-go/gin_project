@@ -85,7 +85,7 @@ func (weapp *Weapp) TestAccessToken() (string, error) {
 	return weapp.getAccessToken()
 }
 
-//获取accessToken
+//获取accessToken ，单体应用可以这么用，多个应用需要借助redis
 func (weapp *Weapp) getAccessToken() (string, error) {
 	if TokenData != nil {
 		if time.Now().Unix() < TokenData.expireTime {

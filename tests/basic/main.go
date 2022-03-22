@@ -15,7 +15,8 @@ func main() {
 	bootstrap.TestInit()
 	//testTrace()
 	//getJson()
-	testweapp()
+	//testweapp()
+	testDB()
 }
 func testweapp() {
 	var ctx = context.Background()
@@ -29,8 +30,8 @@ func testDB() {
 	var data = models.NewApis()
 	data.SiteId = 1
 	data.DepartmentId = "2"
-	data.Create(context.Background())
-	logger.Info(context.TODO(), "dataid", data.ID)
+	t := data.Get(context.Background())
+	logger.Info(context.TODO(), "dataid", t)
 }
 func testTrace() {
 	ctx := context.Background()
