@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/liuyong-go/gin_project/app/core"
 	"github.com/liuyong-go/gin_project/libs/logger"
 )
 
@@ -36,13 +37,13 @@ func (*Apis) TableName() string {
 	return "apis"
 }
 func (a *Apis) Create(ctx context.Context) {
-	err := DB.Create(&a).Error
+	err := core.DB.Create(&a).Error
 	if err != nil {
 		logger.Info(ctx, "db insert fail", err)
 	}
 }
 func (a *Apis) Get(ctx context.Context) Apis {
 	var api Apis
-	DB.First(&api)
+	core.DB.First(&api)
 	return api
 }

@@ -100,7 +100,7 @@ func (weapp *Weapp) getAccessToken() (string, error) {
 	}
 	token := gjson.GetBytes(body, "access_token").String()
 	if token != "" {
-		expireIn := gjson.GetBytes(body, "access_token").Int()
+		expireIn := gjson.GetBytes(body, "expires_in").Int()
 		expireTime := time.Now().Unix() + expireIn - 300
 		TokenData = &AceessToken{aceessToken: token, expireTime: expireTime}
 		return token, nil

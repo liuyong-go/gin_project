@@ -3,12 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 
+	"github.com/liuyong-go/gin_project/app/core"
 	"github.com/liuyong-go/gin_project/app/models"
 	"github.com/liuyong-go/gin_project/bootstrap"
 	"github.com/liuyong-go/gin_project/config"
 	"github.com/liuyong-go/gin_project/libs/logger"
 	"github.com/liuyong-go/gin_project/libs/weapp"
+	"github.com/liuyong-go/gin_project/libs/wework"
 )
 
 func main() {
@@ -16,7 +19,18 @@ func main() {
 	//testTrace()
 	//getJson()
 	//testweapp()
-	testDB()
+	//testDB()
+	//testRedis()
+	testWeapp()
+}
+func testWeapp() {
+	wework.SendGroupMsg()
+}
+func testRedis() {
+	cmd := core.RedisCore.Set("test", "test", time.Second*60)
+	fmt.Println(cmd.Err())
+	value := core.RedisCore.Get("test").Val()
+	fmt.Println("value", value)
 }
 func testweapp() {
 	var ctx = context.Background()

@@ -39,3 +39,13 @@ mysql: #都为单体应用，多库通过不同服务去连
     max: 128
     idle: 16
     debug: false
+es:
+  address: ['http://127.0.0.1:9200']
+  username: ""
+  password: ""
+redis:
+  test:
+    name: test
+    addr: 127.0.0.1:6379
+    password: ""
+    db: 0

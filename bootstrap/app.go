@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/liuyong-go/gin_project/app/models"
+	"github.com/liuyong-go/gin_project/app/core"
 	"github.com/liuyong-go/gin_project/config"
 	"github.com/liuyong-go/gin_project/libs/logger"
 	"github.com/liuyong-go/gin_project/libs/ydefer"
@@ -24,7 +24,8 @@ func Start() {
 func InitConfig() {
 
 	logger.InitLogger(config.Config.Logger)
-	err := models.InitMysql(config.Config.MySQL)
+	err := core.InitMysql(config.Config.MySQL)
+	core.InitRedis(config.Config.Redis)
 	if err != nil {
 		logger.Warn(context.TODO(), "db init fail", err)
 	}

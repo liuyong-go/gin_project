@@ -6,7 +6,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/liuyong-go/gin_project/app/models"
+	"github.com/liuyong-go/gin_project/app/core"
 	"github.com/liuyong-go/gin_project/libs/logger"
 	"github.com/toolkits/pkg/file"
 	"github.com/toolkits/pkg/runner"
@@ -42,15 +42,25 @@ func InitBaseInfo() {
 	if err != nil {
 		panic(err)
 	}
+	err = ParseAppConfig()
+	if err != nil {
+		panic(err)
+	}
 }
 
 type ConfigStruct struct {
 	Logger logger.LoggerStruct
 	HTTP   httpStruct
 	RPC    rpcStruct
-	MySQL  models.MysqlConfig
+	MySQL  core.MysqlConfig
+	Redis  core.RedisMap
+	Es     EsConfig
 }
-
+type EsConfig struct {
+	Address  []string `yaml:"address"`
+	Username string   `yaml:"username"`
+	Password string   `yaml:"password"`
+}
 type httpStruct struct {
 	Mode           string `yaml:"mode"`
 	Listen         string `yaml:"listen"`
@@ -81,10 +91,7 @@ func ParseConfig() error {
 	return nil
 }
 func GetYmlFile(module string) string {
-	filename := module + ".yaml"
-	if module == "config" {
-		filename = module + "." + BaseInfo.Env + ".yaml"
-	}
+	filename := module + "." + BaseInfo.Env + ".yaml"
 	ymlFile := path.Join(BaseInfo.ConfigPath, filename)
 	if file.IsExist(ymlFile) {
 		return ymlFile
