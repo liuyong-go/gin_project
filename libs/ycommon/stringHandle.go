@@ -3,6 +3,8 @@ package ycommon
 import (
 	"strings"
 	"unicode"
+
+	"github.com/gofrs/uuid"
 )
 
 //CamelCase 小写加下划线转驼峰
@@ -76,4 +78,8 @@ func CamelCaseToUnderscore(s string) string {
 		output = append(output, unicode.ToLower(r))
 	}
 	return string(output)
+}
+func UUID() string {
+	uid, _ := uuid.NewV4()
+	return strings.Replace(uid.String(), "-", "", -1)
 }

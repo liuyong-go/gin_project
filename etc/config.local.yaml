@@ -30,12 +30,12 @@ rpc:
   listen: 0.0.0.0:9000
 mysql: #都为单体应用，多库通过不同服务去连
   master:
-    addr: "root:123@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Asia%2FShanghai"
+    addr: "root:123@tcp(127.0.0.1:3306)/blog?charset=utf8&parseTime=True&loc=Asia%2FShanghai"
     max: 128
     idle: 16
     debug: false
   slave:
-    addr: "root:123@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Asia%2FShanghai"
+    addr: "root:123@tcp(127.0.0.1:3306)/blog?charset=utf8&parseTime=True&loc=Asia%2FShanghai"
     max: 128
     idle: 16
     debug: false

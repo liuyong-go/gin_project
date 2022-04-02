@@ -12,6 +12,7 @@ import (
 	"github.com/liuyong-go/gin_project/libs/logger"
 	"github.com/liuyong-go/gin_project/libs/weapp"
 	"github.com/liuyong-go/gin_project/libs/wework"
+	"github.com/liuyong-go/gin_project/libs/ycommon"
 )
 
 func main() {
@@ -19,9 +20,14 @@ func main() {
 	//testTrace()
 	//getJson()
 	//testweapp()
-	//testDB()
+	testDB()
 	//testRedis()
-	testWeapp()
+	//testWeapp()
+	//testPage()
+}
+func testPage() {
+	result := ycommon.Paginator(5, 3, 100)
+	fmt.Println(result)
 }
 func testWeapp() {
 	wework.SendGroupMsg()
@@ -41,11 +47,25 @@ func testweapp() {
 	fmt.Println(weapp)
 }
 func testDB() {
-	var data = models.NewApis()
-	data.SiteId = 1
-	data.DepartmentId = "2"
-	t := data.Get(context.Background())
-	logger.Info(context.TODO(), "dataid", t)
+	ctx := context.Background()
+	var data = models.NewArticle()
+	// data.Uid = 1
+	// data.Title = "测试标题1"
+	// data.Desc = "简单描述1"
+	// data.Content = "正文内容2"
+	// data.UniqId = ycommon.UUID()
+	// data.State = 1
+	// data.Insert(ctx)
+	data.GetByUniqID(ctx, "0")
+	data.Del(ctx)
+	// data.Title = "修改测试标题2"
+	// data.Save(ctx)
+	//data.Incr(ctx, "view_nums")
+	// where := map[string]interface{}{
+	// 	"uid": 1,
+	// }
+	// result := data.PageList(where, 1, 10, "id desc")
+	//fmt.Println(result)
 }
 func testTrace() {
 	ctx := context.Background()

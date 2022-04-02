@@ -11,10 +11,15 @@ var AppConfig *AppStruct
 
 type AppStruct struct {
 	WeWork WeWork
+	Qiniu  Qiniu
 }
 type WeWork struct {
 	Corpid     string `yaml:"corpid"`
 	Corpsecret string `yaml:"corpsecret"`
+}
+type Qiniu struct {
+	Accesskey string `yaml:"accesskey"`
+	Secretkey string `yaml:"secretkey"`
 }
 
 //获取基础配置项

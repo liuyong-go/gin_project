@@ -60,12 +60,22 @@ func (ge *Generator) getFields(tableName string) []Field {
 
 //生成Model
 func (ge *Generator) generateModel(table Table, fields []Field) {
-	content := "package models\n\n"
+	content := `package models
+	import (
+		"context"
+		"time"
+		"github.com/liuyong-go/gin_project/app/core"
+		"github.com/liuyong-go/gin_project/libs/logger"
+	)
+	
+	`
+	CamelTableName := ycommon.CamelCase(table.Name)
+
 	//表注释
 	if len(table.Comment) > 0 {
 		content += "// " + table.Comment + "\n"
 	}
-	content += "type " + ycommon.CamelCase(table.Name) + " struct {\n"
+	content += "type " + CamelTableName + " struct {\n"
 	//生成字段
 	var fieldName = ""
 	for _, field := range fields {
@@ -82,13 +92,36 @@ func (ge *Generator) generateModel(table Table, fields []Field) {
 	}
 	content += "}"
 	content += "\n"
-	content += "func New" + ycommon.CamelCase(table.Name) + "() (*" + ycommon.CamelCase(table.Name) + ") {\n"
-	content += "	return &" + ycommon.CamelCase(table.Name) + "{}\n"
-	content += "}"
-	content += "\n"
-	content += "func (*" + ycommon.CamelCase(table.Name) + ") TableName() string {\n"
-	content += "	return \"" + table.Name + "\"\n"
-	content += "}"
+	content += `
+	func New` + CamelTableName + `() *` + CamelTableName + ` {
+		return new(` + CamelTableName + `)
+	}
+	func (*` + CamelTableName + `) TableName() string {
+		return "` + table.Name + `"
+	}
+	func (a *` + CamelTableName + `) Insert(ctx context.Context) {
+		err := core.DB.Create(&a).Error
+		if err != nil {
+			logger.Info(ctx, "db insert fail", err)
+		}
+	}
+	func (a *` + CamelTableName + `) Save(ctx context.Context) {
+		core.DB.Save(a)
+	}
+	//获取分页列表
+	func (a *` + CamelTableName + `) PageList(where map[string]interface{}, page int, pagesize int, order string) (result []` + CamelTableName + `) {
+		if page < 1 {
+			page = 1
+		}
+		offset := (page - 1) * pagesize
+	
+		core.DB.Where(where).Order(order).Offset(offset).Limit(pagesize).Find(&result)
+		return
+	}
+	func (a *` + CamelTableName + `) Del(ctx context.Context) {
+		core.DB.Delete(a)
+	}
+	`
 	filename := ge.ModelsPath + ycommon.CamelCase(table.Name) + ".go"
 	var f *os.File
 	var err error
@@ -154,7 +187,12 @@ func getFiledType(field Field) string {
 
 //获取字段json描述
 func getFieldJson(field Field) string {
-	return `json:"` + field.Field + `"`
+	typeArr := strings.Split(field.Type, "(")
+	defaultStr := ""
+	if typeArr[0] == "datetime" {
+		defaultStr = ";default:null"
+	}
+	return `json:"` + field.Field + `" gorm:"column:` + field.Field + defaultStr + `"`
 }
 
 //获取字段说明

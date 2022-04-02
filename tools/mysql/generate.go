@@ -26,6 +26,6 @@ func geneModels() {
 		logger.Warn(context.TODO(), "db init fail", err)
 	}
 	modelPath := config.BaseInfo.RootPath + "/app/models/"
-	var tables = []string{"apis"}
-	modelsgenerate.NewGenerator(core.DB, modelPath, "test").Genertate(tables...)
+	var tables = []string{"answer", "discuss", "question", "tag_relation", "user", "user_follows", "user_likes"}
+	modelsgenerate.NewGenerator(core.DB, modelPath, "blog").Genertate(tables...)
 }

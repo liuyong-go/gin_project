@@ -1,0 +1,4 @@
+ALTER TABLE `blog`.`article` 
+CHANGE COLUMN `uniq_id` `uniq_id` CHAR(32) NOT NULL DEFAULT '' COMMENT '唯一ID' ;
+ALTER TABLE `blog`.`question` 
+CHANGE COLUMN `uniq_id` `uniq_id` CHAR(32) NOT NULL DEFAULT '' COMMENT '唯一ID' ;
