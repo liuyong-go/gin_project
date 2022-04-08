@@ -18,6 +18,7 @@ require (
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.5 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/spf13/cast v1.4.1 // indirect
 	github.com/stretchr/testify v1.7.1 // indirect
 	github.com/tidwall/gjson v1.12.1
 	github.com/toolkits/pkg v1.2.9

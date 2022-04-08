@@ -20,7 +20,7 @@ func main() {
 	//testTrace()
 	//getJson()
 	//testweapp()
-	testDB()
+	//testDB()
 	//testRedis()
 	//testWeapp()
 	//testPage()

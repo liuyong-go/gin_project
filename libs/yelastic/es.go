@@ -13,6 +13,7 @@ import (
 	es7 "github.com/elastic/go-elasticsearch/v7"
 	"github.com/elastic/go-elasticsearch/v7/esapi"
 	"github.com/liuyong-go/gin_project/config"
+	"github.com/tidwall/gjson"
 )
 
 var (
@@ -24,6 +25,29 @@ var booltrue bool = true
 
 type ES struct {
 	Client *es7.Client
+}
+
+//单词相关搜索，按照相关分排序
+type wordMatch struct {
+	Query struct {
+		Match map[string]interface{} `json:"match"`
+	} `json:"query"`
+}
+type multiFiledMatch struct {
+	Query struct {
+		MultiMatch struct {
+			Query  string   `json:"query"`
+			Type   string   `json:"type"`
+			Fields []string `json:"fields"`
+		} `json:"multi_match"`
+	} `json:"query"`
+}
+
+//多个单词同时包含且以短语形式紧挨着
+type phraseMatch struct {
+	Query struct {
+		MatchPhrase map[string]interface{} `json:"match_phrase"`
+	} `json:"query"`
 }
 
 func NewES() *ES {
@@ -43,8 +67,8 @@ func NewES() *ES {
 	return elas
 }
 
-//CreateDocument 创建文档
-func (elas *ES) CreateDocument(index string, DocumentType string, documentID string, text map[string]interface{}) ([]byte, error) {
+//CreateDocument 创建文档 index 索引，DocumentType 类型，documentID 文章id,text 内容，结构体或map
+func (elas *ES) CreateDocument(ctx context.Context, index string, DocumentType string, documentID string, text interface{}) ([]byte, error) {
 	mjson, _ := json.Marshal(text)
 	var content = string(mjson)
 	req := esapi.IndexRequest{
@@ -54,7 +78,42 @@ func (elas *ES) CreateDocument(index string, DocumentType string, documentID str
 		Body:         strings.NewReader(content),
 		Refresh:      "true",
 	}
-	res, err := req.Do(context.Background(), elas.Client)
+	res, err := req.Do(ctx, elas.Client)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	return ioutil.ReadAll(res.Body)
+}
+
+//根据id拿信息
+func (elas *ES) GetByID(ctx context.Context, index string, DocumentType string, documentID string) (result string, err error) {
+	res, err := elas.Client.Get(index, documentID, elas.Client.Get.WithDocumentType(DocumentType), elas.Client.Get.WithContext(ctx))
+	if err != nil {
+		return
+	}
+	resultb, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return
+	}
+	result = gjson.GetBytes(resultb, "_source").String()
+	return
+}
+
+//Search 复杂检索，自定义query
+func (elas *ES) Search(ctx context.Context, query interface{}, index string, DocumentType string) ([]byte, error) {
+	var buf bytes.Buffer
+	if err = json.NewEncoder(&buf).Encode(query); err != nil {
+		return nil, err
+	}
+	res, err := elas.Client.Search(
+		elas.Client.Search.WithContext(ctx),
+		elas.Client.Search.WithIndex(index),
+		elas.Client.Search.WithDocumentType(DocumentType),
+		elas.Client.Search.WithBody(&buf),
+		elas.Client.Search.WithTrackTotalHits(true),
+		elas.Client.Search.WithPretty(),
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -120,53 +179,38 @@ func (elas *ES) PutMapping(text map[string]interface{}, indexs []string) ([]byte
 	return ioutil.ReadAll(res.Body)
 }
 
-//Search 复杂检索，自定义query
-func (elas *ES) Search(query interface{}, index string, DocumentType string) ([]byte, error) {
-	var buf bytes.Buffer
-	if err = json.NewEncoder(&buf).Encode(query); err != nil {
-		return nil, err
-	}
-	res, err := elas.Client.Search(
-		elas.Client.Search.WithContext(context.Background()),
-		elas.Client.Search.WithIndex(index),
-		elas.Client.Search.WithDocumentType(DocumentType),
-		elas.Client.Search.WithBody(&buf),
-		elas.Client.Search.WithTrackTotalHits(true),
-		elas.Client.Search.WithPretty(),
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-	return ioutil.ReadAll(res.Body)
+//WordSearch 关键词检索 index 索引名字，key 检索字段，value 检索字段值
+func (elas *ES) WordMatch(ctx context.Context, key string, value string, index string, documentType string) ([]byte, error) {
+	var query wordMatch
+	query.Query.Match = map[string]interface{}{key: value}
+	return elas.Search(ctx, query, index, documentType)
 }
 
-//WordSearch 关键词检索 index 索引名字，key 检索字段，value 检索字段值
-func (elas *ES) WordSearch(key string, value string, index string, documentType string) ([]byte, error) {
-	query := map[string]interface{}{
-		"query": map[string]interface{}{
-			"match": map[string]interface{}{
-				key: value,
-			},
-		},
-	}
-	return elas.Search(query, index, documentType)
+//短语搜索
+func (elas *ES) PhrasseMatch(ctx context.Context, key string, value string, index string, documentType string) ([]byte, error) {
+	var query phraseMatch
+	query.Query.MatchPhrase = map[string]interface{}{key: value}
+	return elas.Search(ctx, query, index, documentType)
 }
 
 //WordMultiSearch 多字段关键词检索 index 索引名字，key 检索字段，value 检索字段值
-func (elas *ES) WordMultiSearch(keyword string, fields []string, index string, documentType string) ([]byte, error) {
-	query := map[string]interface{}{
-		"query": map[string]interface{}{
-			"multi_match": map[string]interface{}{
-				"query":  keyword,
-				"type":   "most_fields",
-				"fields": fields,
-			},
-		},
-	}
-	return elas.Search(query, index, documentType)
+func (elas *ES) WordMultiSearch(ctx context.Context, keyword string, fields []string, index string, documentType string) ([]byte, error) {
+	// query := map[string]interface{}{
+	// 	"query": map[string]interface{}{
+	// 		"multi_match": map[string]interface{}{
+	// 			"query":  keyword,
+	// 			"type":   "most_fields",
+	// 			"fields": fields,
+	// 		},
+	// 	},
+	// }
+	var query multiFiledMatch
+	query.Query.MultiMatch.Type = "most_fields"
+	query.Query.MultiMatch.Fields = fields
+	query.Query.MultiMatch.Query = keyword
+	return elas.Search(ctx, query, index, documentType)
 }
-func (elas *ES) SearchByLocation(distance string, lat string, lon string, index string, documentType string, page int, pageSize int) ([]byte, error) {
+func (elas *ES) SearchByLocation(ctx context.Context, distance string, lat string, lon string, index string, documentType string, page int, pageSize int) ([]byte, error) {
 	offset := (page - 1) * pageSize
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
@@ -198,5 +242,5 @@ func (elas *ES) SearchByLocation(distance string, lat string, lon string, index 
 			},
 		},
 	}
-	return elas.Search(query, index, documentType)
+	return elas.Search(ctx, query, index, documentType)
 }
