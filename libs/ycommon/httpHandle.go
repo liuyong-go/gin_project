@@ -24,7 +24,7 @@ func HttpGet(url string) ([]byte, error) {
 	}
 	return body, nil
 }
-func PostForm(ctx context.Context, url string, header map[string]interface{}, formData map[string]interface{}, timeout float32) (result string, err error) {
+func PostForm(ctx context.Context, url string, header map[string]interface{}, formData map[string]interface{}, timeout float32) (result []byte, err error) {
 	cli := goz.NewClient()
 
 	resp, err := cli.Post(url, goz.Options{
@@ -34,15 +34,13 @@ func PostForm(ctx context.Context, url string, header map[string]interface{}, fo
 	})
 	if err != nil {
 		logger.Info(ctx, "call_url_api_fail", url, err)
-		result = ""
 		return
 	}
 
-	body, _ := resp.GetBody()
-	result = body.String()
+	result, _ = resp.GetBody()
 	return
 }
-func PostRow(ctx context.Context, url string, header map[string]interface{}, rowData interface{}, timeout float32) (result string, err error) {
+func PostRow(ctx context.Context, url string, header map[string]interface{}, rowData interface{}, timeout float32) (result []byte, err error) {
 	if err != nil {
 		return
 	}
@@ -54,12 +52,10 @@ func PostRow(ctx context.Context, url string, header map[string]interface{}, row
 	})
 	if err != nil {
 		logger.Info(ctx, "call_url_api_fail", url, err)
-		result = ""
 		return
 	}
 
-	body, _ := resp.GetBody()
-	result = body.String()
+	result, _ = resp.GetBody()
 	return
 }
 
